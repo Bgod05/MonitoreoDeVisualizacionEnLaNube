@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+        #miTabla {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+            background-color: #ffffff; /* Fondo blanco para la tabla */
+            overflow: hidden; /* Oculta el contenido que se desborde */
+            margin: 25px 0; /* Margen superior e inferior */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipo de letra */
+        }
+
+        /* Estilos para las celdas y encabezados */
+        #miTabla th, #miTabla td {
+            border: 1px solid #ddd; /* Borde más suave */
+            padding: 15px; /* Espaciado interno más amplio */
+            text-align: left; /* Alineación del texto */
+        }
+
+        /* Estilo para los encabezados de la tabla */
+        #miTabla th {
+            background-color: #4CAF50; /* Color de fondo para los encabezados */
+            color: white; /* Color de texto para los encabezados */
+        }
+
+        /* Estilos para el estado Premium */
+        .premium-state {
+            padding: 5px 10px; /* Espaciado interno */
+            border-radius: 5px; /* Bordes redondeados */
+            color: white; /* Color de texto */
+            font-weight: bold; /* Negrita para el texto */
+            text-transform: uppercase; /* Texto en mayúsculas */
+            font-size: 0.9em; /* Tamaño de la fuente */
+        }
+
+        .premium-true {
+            background-color: #4CAF50; /* Fondo verde para Premium */
+        }
+
+        .premium-false {
+            background-color: #f44336; /* Fondo rojo para No Premium */
+        }
+
+        /* Estilos para las filas al pasar el mouse */
+        #miTabla tr:hover {
+            background-color: #f5f5f5; /* Color de fondo al pasar el mouse */
+        }
+
+        /* Estilos para el checkbox */
+        #myCheckbox {
+            margin-right: 10px; /* Margen a la derecha del checkbox */
+        }
+
+        /* Estilo para la etiqueta del checkbox */
+        label {
+            font-weight: bold; /* Negrita para la etiqueta */
+            font-size: 1.1em; /* Tamaño de la fuente para la etiqueta */
+        }
+    </style>
+    <script>
+        function myFunction() {
+            let checkbox, table, tr, td, i, span;
+            checkbox = document.getElementById("myCheckbox");
+            table = document.getElementById("miTabla");
+            tr = table.getElementsByTagName("tr");
+            for (i = 1; i < tr.length; i++) { // Comienza en 1 para saltar el encabezado de la tabla
+                td = tr[i].getElementsByTagName("td")[4];
+                if (td) {
+                    span = td.getElementsByTagName("span")[0];
+                    if (checkbox.checked && span.textContent === "No Premium") {
+                        tr[i].style.display = "none";
+                    } else {
+                        tr[i].style.display = "";
+                    }
+                    // Aplicar estilos según el estado Premium
+                    if (span.textContent === "Premium") {
+                        span.className = "premium-state premium-true";
+                    } else {
+                        span.className = "premium-state premium-false";
+                    }
+                }
+            }
+        }
+    </script>
+    <meta charset="UTF-8">
+    <title>Usuarios Registrados</title>
+</head>
+<body>
+<label for="myCheckbox"></label><input type="checkbox" id="myCheckbox" onclick="myFunction()"> Mostrar solo usuarios
+Premium
+<table id="miTabla">
+    <tr>
+        <th>Usuario</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Estado</th>
+    </tr>
+    {% for user in user_data %}
+        <tr>
+            <td>{{ user.user }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% if user.isPremium %}
+                    <span class="premium-state premium-true">Premium</span>
+                {% else %}
+                    <span class="premium-state premium-false">No Premium</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
